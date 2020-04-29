@@ -1,0 +1,13 @@
+{
+  "name": "pixelly-tile",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:codythompson/pixelly-tile.git",
+  "author": "Cody Thompson <cody.thompson22@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc && node dist/index.js"
+  }
+}
