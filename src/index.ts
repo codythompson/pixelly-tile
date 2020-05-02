@@ -1,72 +1,71 @@
-import { promises as fs } from "fs"
+import { promises as fs } from "fs";
 
 type RenderArgs = {
-  width: number
-  height: number
-}
+  width: number;
+  height: number;
+};
 
 class ParsedLine {
-  lineNumber: number = NaN
-  args: number[] = []
+  constructor(
+    public readonly command: string,
+    public readonly subCommand: string,
+    public readonly args: number[],
+    public readonly lineNumber: number
+  ) {}
 
   get x(): number {
-    return this.args.length >= 1? this.args[0] : NaN
+    return this.args.length >= 1 ? this.args[0] : NaN;
   }
 
   get y(): number {
-    return this.args.length >= 2? this.args[1] : NaN
+    return this.args.length >= 2 ? this.args[1] : NaN;
   }
 
   get w(): number {
-    return this.args.length >= 3? this.args[2] : NaN
+    return this.args.length >= 3 ? this.args[2] : NaN;
   }
 
   get h(): number {
-    return this.args.length >= 3? this.args[2] : NaN
+    return this.args.length >= 3 ? this.args[2] : NaN;
   }
 }
 
-class DrawCommand extends ParsedLine {
-  lineNumber: number
-  args:number[]
-
-  // TODO constructor - then Routine?
-}
+class DrawCommand extends ParsedLine {}
 
 type ParseResult = {
-  errors: string[]
-  lines: ParsedLine[]
-}
+  errors: string[];
+  lines: ParsedLine[];
+};
 
-function parseLines(content:string): ParseResult {
-  const errors:string[] = []
-  const parsedLines:ParsedLine[] = []
-  const lines:string[][] = content
+function parseLines(content: string): ParseResult {
+  const errors: string[] = [];
+  const parsedLines: ParsedLine[] = [];
+  const lines: string[][] = content
     .split("\n")
-    .map(line => line.trim().split(" "))
+    .map((line) => line.trim().split(" "));
   for (let i = 0; i < lines.length; i++) {
-    const tokens:string[] = lines[i]
+    const tokens: string[] = lines[i];
     if (tokens.length == 0) {
-      continue
+      continue;
     }
   }
   return {
     errors,
-    lines: parsedLines
-  }
+    lines: parsedLines,
+  };
 }
 
-export function render(renderArgs:RenderArgs): string {
-  const {width, height} = renderArgs
-  return (`
+export function render(renderArgs: RenderArgs): string {
+  const { width, height } = renderArgs;
+  return `
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewbox="0 0 ${width} ${height}">
 </svg>
-`)
+`;
 }
 
-async function go():Promise<void> {
-  const tst:string = render({width: 128, height: 128})
-  const html:string = `
+async function go(): Promise<void> {
+  const tst: string = render({ width: 128, height: 128 });
+  const html: string = `
     <!DOCTYPE html>
     <html">
     <head>
@@ -78,9 +77,9 @@ async function go():Promise<void> {
       ${tst}
     </body>
     </html>
-  `
-  await fs.writeFile('outputs/test.svg', tst, "utf-8")
-  await fs.writeFile('outputs/index.html', html, "utf-8")
+  `;
+  await fs.writeFile("outputs/test.svg", tst, "utf-8");
+  await fs.writeFile("outputs/index.html", html, "utf-8");
 }
 
-go()
+go();
